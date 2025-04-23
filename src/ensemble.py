@@ -1,0 +1,1 @@
+"""Apply Algorithm 1 (rule layer)"""

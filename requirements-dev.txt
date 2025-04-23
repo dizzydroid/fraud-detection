@@ -1,0 +1,8 @@
+# code quality
+ruff==0.4.4
+black==24.4.2
+mypy==1.10.0
+
+# testing
+pytest==8.2.0
+pytest-cov==5.0.0

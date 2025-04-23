@@ -1,0 +1,21 @@
+name: fraud-detection
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.11
+  - scikit-learn>=1.4
+  - pandas
+  - numpy
+  - joblib
+  - jupyterlab
+  - matplotlib
+  - imbalanced-learn
+  # dev deps
+  - pip
+  - pip:
+      - pytest
+      - black
+      - ruff
+      - mypy
+      - coverage
