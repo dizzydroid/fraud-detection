@@ -18,6 +18,5 @@ __pycache__/
 .idea/
 
 # Jupyter Notebook
-*.ipynb
 *.html
 *.pdf
