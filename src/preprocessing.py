@@ -12,7 +12,7 @@ import pandas as pd
 import os
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
-from imblearn.over_sampling import SMOTE
+# from imblearn.over_sampling import SMOTE
 
 def load_data(filepath):
     """Load data from CSV file."""
@@ -50,29 +50,29 @@ def split_data(df, target_column='isFraud'):
     print(f"Fraud percentage: {y.mean() * 100:.2f}%")
     return X_train, X_test, y_train, y_test
 
-def balance_data(X_train, y_train, sampling_strategy=1):
-    """
-    Apply SMOTE to balance the training dataset.
+# def balance_data(X_train, y_train, sampling_strategy=1):
+#     """
+#     Apply SMOTE to balance the training dataset.
     
-    Parameters:
-    - X_train: Training features
-    - y_train: Training labels
-    - sampling_strategy: Target ratio of minority to majority class (default: 1)
+#     Parameters:
+#     - X_train: Training features
+#     - y_train: Training labels
+#     - sampling_strategy: Target ratio of minority to majority class (default: 1)
     
-    Returns:
-    - X_resampled: Balanced training features
-    - y_resampled: Balanced training labels
-    """
-    print("Before balancing:")
-    print(y_train.value_counts())
+#     Returns:
+#     - X_resampled: Balanced training features
+#     - y_resampled: Balanced training labels
+#     """
+#     print("Before balancing:")
+#     print(y_train.value_counts())
     
-    smote = SMOTE(sampling_strategy=sampling_strategy, random_state=42)
-    X_resampled, y_resampled = smote.fit_resample(X_train, y_train)
+#     smote = SMOTE(sampling_strategy=sampling_strategy, random_state=42)
+#     X_resampled, y_resampled = smote.fit_resample(X_train, y_train)
     
-    print("After balancing:")
-    print(pd.Series(y_resampled).value_counts())
+#     print("After balancing:")
+#     print(pd.Series(y_resampled).value_counts())
     
-    return X_resampled, y_resampled
+#     return X_resampled, y_resampled
 
 def save_data(X_train, X_test, y_train, y_test, balanced=False, save_dir='data/processed'):
     """Save preprocessed data as csv files."""
