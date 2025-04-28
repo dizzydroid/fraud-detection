@@ -76,7 +76,9 @@ def compute_metrics(y_true, y_pred):
         "f1": f1,   
         "roc_auc": roc_auc,
         "confusion_matrix": cm.tolist(),
-        "accuracy": accuracy
+        "accuracy": accuracy,
+        "fpr": fpr,
+        "tpr": tpr
     }
 
 
@@ -98,7 +100,7 @@ def plot_metrics(metrics):
     ax1.legend()
     
     # Plot ROC curve
-    ax2.plot(fpr, tpr, label="ROC Curve (AUC = {:.2f})".format(metrics["roc_auc"]))
+    ax2.plot(metrics["fpr"], metrics["tpr"], label="ROC Curve (AUC = {:.2f})".format(metrics["roc_auc"]))
     ax2.set_xlabel("False Positive Rate")
     ax2.set_ylabel("True Positive Rate")
     ax2.set_title("ROC Curve")
