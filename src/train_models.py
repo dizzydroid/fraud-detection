@@ -5,7 +5,7 @@ This module orchestrates the training pipeline for the fraud detection system. I
 2. Trains three different models:
    - K-Nearest Neighbors (KNN)
    - Linear Discriminant Analysis (LDA)
-   - Logistic Regression (LR)
+   - Linear Regression (LR)
 3. Saves the trained models as pickled files in the artifacts/ directory
 
 Usage:
@@ -22,12 +22,11 @@ import os
 import pickle
 import logging
 import sys
-from typing import Dict, Any, Tuple
+from typing import Dict, Tuple
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from sklearn.base import BaseEstimator
 from sklearn.metrics import recall_score
 
 # Add the project root to the Python path to allow imports when run directly
@@ -36,10 +35,7 @@ if str(project_root) not in sys.path:
     sys.path.append(str(project_root))
 
 # Import model classes from respective modules
-from src.models.knn import KNNModel
-from src.models.lda import LDAModel
-from src.models.linreg import LogisticRegressionModel
-from src.__init__ import ARTIFACTS_DIR, PROC_DIR
+from src import ARTIFACTS_DIR, PROC_DIR, MODEL_NAMES, MODEL_CLASSES
 
 logging.basicConfig(
     level=logging.INFO,
@@ -88,7 +84,7 @@ def load_data(balanced=False) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.nd
 
 def train_and_save_models(X_train: np.ndarray, y_train: np.ndarray, X_test: np.ndarray, y_test: np.ndarray) -> Dict[str, float]:
     """
-    Train KNN, LDA and Logistic Regression models and save them to disk.
+    Train KNN, LDA and Linear Regression models and save them to disk.
     
     Args:
         X_train: Training features
@@ -99,12 +95,6 @@ def train_and_save_models(X_train: np.ndarray, y_train: np.ndarray, X_test: np.n
     Returns:
         Dictionary mapping model names to their recall scores on test data
     """
-    models = {
-        'knn': KNNModel(),
-        'lda': LDAModel(),
-        'lr': LogisticRegressionModel()
-    }
-    
     recall_scores = {}
     
     # Ensure artifacts directory exists
@@ -117,17 +107,18 @@ def train_and_save_models(X_train: np.ndarray, y_train: np.ndarray, X_test: np.n
     print("="*18)
     
     # Train and save each model
-    for name, model in models.items():
-        model_name = {
-            'knn': 'K-Nearest Neighbors',
-            'lda': 'Linear Discriminant Analysis',
-            'lr': 'Logistic Regression'
-        }.get(name, name.upper())
+    for name, model in MODEL_CLASSES.items():
+        model_name = MODEL_NAMES.get(name, name.upper())
         
         print(f"\nTraining {model_name}...")
         
+        # Initialize model
+        model = model()
+        
+        # Fit model
         model.fit(X_train, y_train)
         
+        # Save model
         model_path = os.path.join(ARTIFACTS_DIR, f"{name}.pkl")
         with open(model_path, 'wb') as f:
             pickle.dump(model, f)
@@ -158,7 +149,7 @@ def main():
     print("\nThis script will train three models for fraud detection:")
     print("  - K-Nearest Neighbors (KNN)")
     print("  - Linear Discriminant Analysis (LDA)")
-    print("  - Logistic Regression (LR)")
+    print("  - Linear Regression (LR)")
     print("\nAll models will be saved to the artifacts/ directory for later use.")
     
     # Load preprocessed data (balanced or unbalanced)
@@ -183,11 +174,7 @@ def main():
     
     print("\nModel Recall Scores:")
     for i, (model_name, recall) in enumerate(sorted_models):
-        full_name = {
-            'knn': 'K-Nearest Neighbors',
-            'lda': 'Linear Discriminant Analysis',
-            'lr': 'Logistic Regression'
-        }.get(model_name, model_name.upper())
+        full_name = MODEL_NAMES.get(model_name, model_name.upper())
 
         print(f"{i+1}. {full_name}: {recall:.4f}")
 
