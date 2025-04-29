@@ -102,34 +102,22 @@ def train_and_save_models(X_train: np.ndarray, y_train: np.ndarray, X_test: np.n
         os.makedirs(ARTIFACTS_DIR)
         print(f"\nCreated artifacts directory: {ARTIFACTS_DIR}")
     
-    print("\n" + "="*18)
-    print(f"TRAINING MODELS")
-    print("="*18)
-    
-    # Train and save each model
     for name, model in MODEL_CLASSES.items():
-        model_name = MODEL_NAMES.get(name, name.upper())
-        
-        print(f"\nTraining {model_name}...")
-        
-        # Initialize model
-        model = model()
-        
-        # Fit model
-        model.fit(X_train, y_train)
-        
-        # Save model
         model_path = os.path.join(ARTIFACTS_DIR, f"{name}.pkl")
+        model_name = MODEL_NAMES.get(name, name.upper())
+        if os.path.exists(model_path):
+            print(f"{model_name} artifact already exists. Skipping training.")
+            continue
+        print(f"\nTraining {model_name}...")
+        model = model()
+        model.fit(X_train, y_train)
         with open(model_path, 'wb') as f:
             pickle.dump(model, f)
         print(f"Saved model to {os.path.basename(model_path)}")
-        
-        # Evaluate model recall
         y_pred = model.predict(X_test)
         recall = recall_score(y_test, y_pred)
         recall_scores[name] = recall
         print(f"{model_name} recall: {recall:.4f}")
-    
     return recall_scores
 
 
@@ -154,29 +142,29 @@ def main():
     
     # Load preprocessed data (balanced or unbalanced)
     X_train, X_test, y_train, y_test = load_data(balanced=args.balanced)
-    
-    # Train models and save them to artifacts directory
     recall_scores = train_and_save_models(X_train, y_train, X_test, y_test)
-    
+
     # Save ground truth (y_test) for later evaluation
     y_true_path = os.path.join(ARTIFACTS_DIR, "y_true.npy")
-    np.save(y_true_path, y_test)
-    print(f"\nSaved ground truth labels to {os.path.basename(y_true_path)}")
-    print("    (These will be used for evaluating model performance later)")
+    if not os.path.exists(y_true_path):
+        np.save(y_true_path, y_test)
+        print(f"\nSaved ground truth labels to {os.path.basename(y_true_path)}")
+        print("    (These will be used for evaluating model performance later)")
+    else:
+        print(f"Ground truth labels already exist at {os.path.basename(y_true_path)}. Skipping save.")
 
     # Print recall scores summary
-    print("\n" + "="*50)
-    print("TRAINING COMPLETE - RECALL SCORES SUMMARY")
-    print("="*50)
-    
-    # Sort models by recall score (highest first)
-    sorted_models = sorted(recall_scores.items(), key=lambda x: x[1], reverse=True)
-    
-    print("\nModel Recall Scores:")
-    for i, (model_name, recall) in enumerate(sorted_models):
-        full_name = MODEL_NAMES.get(model_name, model_name.upper())
-
-        print(f"{i+1}. {full_name}: {recall:.4f}")
+    if recall_scores:
+        print("\n" + "="*50)
+        print("TRAINING COMPLETE - RECALL SCORES SUMMARY")
+        print("="*50)
+        sorted_models = sorted(recall_scores.items(), key=lambda x: x[1], reverse=True)
+        print("\nModel Recall Scores:")
+        for i, (model_name, recall) in enumerate(sorted_models):
+            full_name = MODEL_NAMES.get(model_name, model_name.upper())
+            print(f"{i+1}. {full_name}: {recall:.4f}")
+    else:
+        print("\nNo models were trained. All artifacts already exist.")
 
 if __name__ == "__main__":
     main()

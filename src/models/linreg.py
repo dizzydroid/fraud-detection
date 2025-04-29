@@ -42,6 +42,10 @@ class LinearRegressionModel:
     def predict_proba(self, X_test):
         """Predict probabilities using the trained Linear Regression model.
         
+        Note: LinearRegression doesn't have predict_proba natively,
+        so we're implementing a custom version that converts regression
+        scores to pseudo-probabilities.
+        
         Args:
             X_test: Test features
             
@@ -49,5 +53,17 @@ class LinearRegressionModel:
             y_proba: Predicted probabilities
         """
         X_test_scaled = self.scaler.transform(X_test)
-        return self.model.predict_proba(X_test_scaled)
+        raw_predictions = self.model.predict(X_test_scaled)
         
+        # Scale predictions to [0, 1] range
+        min_val = raw_predictions.min()
+        max_val = raw_predictions.max()
+        
+        if max_val > min_val:
+            scaled = (raw_predictions - min_val) / (max_val - min_val)
+        else:
+            scaled = np.zeros_like(raw_predictions)
+        
+        # Format as 2D array with probabilities for class 0 and class 1
+        return np.vstack([1-scaled, scaled]).T
+
