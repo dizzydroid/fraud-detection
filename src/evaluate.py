@@ -71,16 +71,15 @@ def compute_metrics(y_true, y_pred):
     f1 = 2 * tp / (2 * tp + fp + fn)
     
     return {
-        "precision": precision,
-        "recall": recall,
-        "f1": f1,   
-        "roc_auc": roc_auc,
-        "confusion_matrix": cm.tolist(),
-        "accuracy": accuracy,
-        "fpr": fpr,
-        "tpr": tpr
+        "precision": float(precision),
+        "recall": float(recall),
+        "f1": float(f1),
+        "roc_auc": float(roc_auc),
+        "confusion_matrix": cm.tolist(),  # already converted
+        "accuracy": float(accuracy),
+        "fpr": fpr.tolist(),
+        "tpr": tpr.tolist()
     }
-
 
 def plot_metrics(metrics):
     """
@@ -114,11 +113,14 @@ def plot_metrics(metrics):
     ax3.legend()
     
     # Plot confusion matrix
-    ax3.imshow(metrics["confusion_matrix"], cmap=plt.cm.Blues)
+    im = ax3.imshow(metrics["confusion_matrix"], cmap=plt.cm.Blues)
     ax3.set_xlabel("Predicted")
     ax3.set_ylabel("True")
     ax3.set_title("Confusion Matrix")
-    ax3.colorbar()
+    plt.colorbar(im, ax=ax3)  
+    
+    # Ensure directory exists
+    os.makedirs(os.path.join(RESULTS_DIR, "figures"), exist_ok=True)
     
     # Save plots
     plt.tight_layout()
