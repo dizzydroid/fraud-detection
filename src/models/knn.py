@@ -24,7 +24,7 @@ class KNNModel:
             n_neighbors=n_neighbors,
             weights=weights,
             algorithm="auto",
-            leaf_size=30,
+            leaf_size=30, # la kant m3mola
             p=2,
             metric="minkowski",
             metric_params=None,

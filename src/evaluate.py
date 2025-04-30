@@ -23,7 +23,7 @@ import json
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix, roc_curve, auc, accuracy_score
+from sklearn.metrics import confusion_matrix, roc_curve, auc, accuracy_score, recall_score, precision_score, f1_score
 import logging
 
 from src import ARTIFACTS_DIR, RESULTS_DIR
@@ -57,7 +57,7 @@ def compute_metrics(y_true, y_pred):
         dict: Performance metrics
     """
     cm = confusion_matrix(y_true, y_pred)
-    tn, fp, fn, tp = cm.ravel()
+    # tn, fp, fn, tp = cm.ravel()
     
     # Compute ROC curve
     fpr, tpr, _ = roc_curve(y_true, y_pred)
@@ -66,9 +66,9 @@ def compute_metrics(y_true, y_pred):
     # Compute accuracy
     accuracy = accuracy_score(y_true, y_pred)
     
-    precision = tp / (tp + fp)
-    recall = tp / (tp + fn)
-    f1 = 2 * tp / (2 * tp + fp + fn)
+    precision = precision_score(y_true, y_pred)
+    recall = recall_score(y_true, y_pred)
+    f1 = f1_score(y_true, y_pred)
     
     return {
         "precision": float(precision),
@@ -128,6 +128,10 @@ def plot_metrics(metrics):
     plt.close()
 
 
+def compute_recall():
+    pass
+    
+    
 def main():
     """Main entry point for evaluating the ensemble model."""
     logger.info("Evaluating ensemble model")

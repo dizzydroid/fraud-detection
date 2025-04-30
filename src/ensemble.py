@@ -52,11 +52,21 @@ def apply_rule_layer(knn_pred: np.ndarray,
     lr_mean = lr_score.mean()
     ensemble = knn_pred.copy()                    # initialise with the tie-breaker
 
-    non_fraud = ((knn_pred == 0) | (lda_pred == 0)) & (lr_score < lr_mean)
-    fraud     = ((knn_pred == 1) | (lda_pred == 1)) & (lr_score > lr_mean)
+    for i in range(len(knn_pred)):
+        # If "non-fraud" is indicated by either KNN or LDA
+        if knn_pred[i] == 0 or lda_pred[i] == 0:
+            if lr_score[i] == 0:
+                ensemble[i] = 0  # Predict non-fraud
+        # If "fraud" is indicated by either KNN or LDA
+        elif knn_pred[i] == 1 or lda_pred[i] == 1:
+            if lr_score[i] == 1:
+                ensemble[i] = 1  # Predict fraud
+        # Otherwise, allocate predicted values from KNN to remaining cases
+        else:
+            ensemble[i] = knn_pred[i]
 
-    ensemble[non_fraud] = 0
-    ensemble[fraud]     = 1
+    # ensemble[non_fraud] = 0
+    # ensemble[fraud]     = 1
     return ensemble
 
 
@@ -75,7 +85,7 @@ def main():
     # **new** – keep LR continuous
     # -----------------------------------------
     # → Add `.decision_function()` to LinearRegressionModel
-    lr_score = models["lr"].decision_function(X_test)
+    lr_score = models["lr"].predict(X_test)
 
     # 4. ensemble -------------------------------------------------------
     y_pred = apply_rule_layer(knn_pred, lda_pred, lr_score)
