@@ -9,6 +9,10 @@ DATA_DIR = ROOT / "data"
 ARTIFACTS_DIR = ROOT / "artifacts"
 RAW_DIR = DATA_DIR / "raw"
 PROC_DIR = DATA_DIR / "processed"
+<<<<<<< HEAD
+=======
+RESULTS_DIR = ROOT / "results"
+>>>>>>> origin/soloPlayer
 
 
 MODEL_NAMES = {

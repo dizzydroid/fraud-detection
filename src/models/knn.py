@@ -3,6 +3,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
 
 
+
 class KNNModel:
     """KNN model optimized for fraud detection."""
 

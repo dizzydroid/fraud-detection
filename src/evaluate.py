@@ -23,7 +23,11 @@ import json
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+<<<<<<< HEAD
 from sklearn.metrics import confusion_matrix, roc_curve, auc, accuracy_score
+=======
+from sklearn.metrics import confusion_matrix, roc_curve, auc, accuracy_score, recall_score, precision_score, f1_score
+>>>>>>> origin/soloPlayer
 import logging
 
 from src import ARTIFACTS_DIR, RESULTS_DIR
@@ -57,7 +61,11 @@ def compute_metrics(y_true, y_pred):
         dict: Performance metrics
     """
     cm = confusion_matrix(y_true, y_pred)
+<<<<<<< HEAD
     tn, fp, fn, tp = cm.ravel()
+=======
+    # tn, fp, fn, tp = cm.ravel()
+>>>>>>> origin/soloPlayer
     
     # Compute ROC curve
     fpr, tpr, _ = roc_curve(y_true, y_pred)
@@ -66,6 +74,7 @@ def compute_metrics(y_true, y_pred):
     # Compute accuracy
     accuracy = accuracy_score(y_true, y_pred)
     
+<<<<<<< HEAD
     precision = tp / (tp + fp)
     recall = tp / (tp + fn)
     f1 = 2 * tp / (2 * tp + fp + fn)
@@ -82,6 +91,23 @@ def compute_metrics(y_true, y_pred):
     }
 
 
+=======
+    precision = precision_score(y_true, y_pred)
+    recall = recall_score(y_true, y_pred)
+    f1 = f1_score(y_true, y_pred)
+    
+    return {
+        "precision": float(precision),
+        "recall": float(recall),
+        "f1": float(f1),
+        "roc_auc": float(roc_auc),
+        "confusion_matrix": cm.tolist(),  # already converted
+        "accuracy": float(accuracy),
+        "fpr": fpr.tolist(),
+        "tpr": tpr.tolist()
+    }
+
+>>>>>>> origin/soloPlayer
 def plot_metrics(metrics):
     """
     Plot key performance metrics.
@@ -114,11 +140,22 @@ def plot_metrics(metrics):
     ax3.legend()
     
     # Plot confusion matrix
+<<<<<<< HEAD
     ax3.imshow(metrics["confusion_matrix"], cmap=plt.cm.Blues)
     ax3.set_xlabel("Predicted")
     ax3.set_ylabel("True")
     ax3.set_title("Confusion Matrix")
     ax3.colorbar()
+=======
+    im = ax3.imshow(metrics["confusion_matrix"], cmap=plt.cm.Blues)
+    ax3.set_xlabel("Predicted")
+    ax3.set_ylabel("True")
+    ax3.set_title("Confusion Matrix")
+    plt.colorbar(im, ax=ax3)  
+    
+    # Ensure directory exists
+    os.makedirs(os.path.join(RESULTS_DIR, "figures"), exist_ok=True)
+>>>>>>> origin/soloPlayer
     
     # Save plots
     plt.tight_layout()
@@ -126,6 +163,13 @@ def plot_metrics(metrics):
     plt.close()
 
 
+<<<<<<< HEAD
+=======
+def compute_recall():
+    pass
+    
+    
+>>>>>>> origin/soloPlayer
 def main():
     """Main entry point for evaluating the ensemble model."""
     logger.info("Evaluating ensemble model")

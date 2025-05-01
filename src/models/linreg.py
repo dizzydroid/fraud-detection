@@ -34,10 +34,16 @@ class LinearRegressionModel:
         Returns:
             y_pred: Predicted labels
         """
+<<<<<<< HEAD
         X_test_scaled = self.scaler.transform(X_test)
         y_pred = self.model.predict(X_test_scaled)
         y_pred = np.where(y_pred > y_pred.mean(), 1, 0)
         return y_pred
+=======
+        scores = self.decision_function(X_test)
+        thresh = scores.mean()
+        return (scores > thresh).astype(int)
+>>>>>>> origin/soloPlayer
     
     def predict_proba(self, X_test):
         """Predict probabilities using the trained Linear Regression model.
@@ -67,3 +73,9 @@ class LinearRegressionModel:
         # Format as 2D array with probabilities for class 0 and class 1
         return np.vstack([1-scaled, scaled]).T
 
+<<<<<<< HEAD
+=======
+    def decision_function(self, X):
+        Xs = self.scaler.transform(X)
+        return self.model.predict(Xs)    
+>>>>>>> origin/soloPlayer
