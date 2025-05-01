@@ -1,6 +1,6 @@
 # Credit-Card Fraud Detection (Recall-First, Chung & Lee 2023, PaySim)
 
-This repository implements and extends the high-recall ensemble approach for fraud detection from **Chung & Lee (2023, Sensors 23-7788)** using the [PaySim](https://www.kaggle.com/datasets/ntnu-testimon/paysim1) dataset. The solution is optimized for **perfect or near-perfect recall** (≥0.93), aiming to catch every fraudulent transaction, following the principle that missing fraud is much more costly than a false alarm.
+This repository implements and extends the high-recall ensemble approach for fraud detection from **Chung & Lee (2023, Sensors 23-7788)** using the [PaySim](https://www.kaggle.com/datasets/ealaxi/paysim1) dataset. The solution is optimized for **perfect or near-perfect recall** (≥0.93), aiming to catch every fraudulent transaction, following the principle that missing fraud is much more costly than a false alarm.
 
 ## 🚀 Getting Started
 
@@ -40,7 +40,7 @@ You can run `make clean` to wipe all outputs and start fresh.
 
 ## 🏆 Methodology
 
-- **Dataset:** [PaySim](https://www.kaggle.com/datasets/ntnu-testimon/paysim1) (6.3M mobile money transactions, highly imbalanced)
+- **Dataset:** [PaySim](https://www.kaggle.com/datasets/ealaxi/paysim1) (6.3M mobile money transactions, highly imbalanced)
 - **Models:**  
   - K-Nearest Neighbors (KNN)
   - Linear Discriminant Analysis (LDA)
