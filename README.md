@@ -68,21 +68,21 @@ Summary of model performance (see notebook for details):
 ## 📚 References
 
 - **Chung, H., & Lee, J. (2023).** “A High-Recall Ensemble Approach for Fraud Detection in Financial Transactions.” [Sensors 23(18), 7788](https://www.mdpi.com/1424-8220/23/18/7788)
-- [PaySim Dataset on Kaggle](https://www.kaggle.com/datasets/ntnu-testimon/paysim1)
+- [PaySim Dataset on Kaggle](https://www.kaggle.com/datasets/ealaxi/paysim1)
 - Scikit-learn documentation: https://scikit-learn.org/stable/documentation.html
 
 ## 👥 Contributors
 
-- Shehab Mahmoud Salah
-- Abdelrahman Hany Mohamed
-- Youssef Ahmed Mohamed
-- Omar Mamon Hamed
-- Seif El Din Tamer Shawky
-- Seif Eldeen Ahmed Abdulaziz
-- Habiba El-sayed Mowafy
-- Aya Tarek Salem
-- Moaz Ragab
-- Ahmed Ashraf Ali
+- [Shehab Mahmoud Salah](https://github.com/dizzydroid)
+- [Abdelrahman Hany Mohamed](https://github.com/dopebiscuit)
+- [Youssef Ahmed Mohamed](https://github.com/unauthorised-401)
+- [Omar Mamon Hamed](https://github.com/Spafic)
+- [Seif El Din Tamer Shawky](https://github.com/SeifT101)
+- [Seif Eldeen Ahmed Abdulaziz](https://github.com/seifelwarwary)
+- [Habiba El-sayed Mowafy](https://github.com/Lucifer3224)
+- [Aya Tarek Salem](https://github.com/AyaTarekS)
+- [Moaz Ragab](https://github.com/moazragab12)
+- [Ahmed Ashraf Ali](https://github.com/AshrafByte)
 
 ---
 
