@@ -20,17 +20,6 @@ from pathlib import Path
 import pickle
 import numpy as np
 import pandas as pd
-<<<<<<< HEAD
-from typing import Dict, List, Any
-
-# Import necessary constants from __init__
-from src import ARTIFACTS_DIR, PROC_DIR, MODEL_NAMES
-
-# Setup logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
-=======
->>>>>>> origin/soloPlayer
 
 # ----------------------------------------------------------------------
 # Project-level constants collected in src/__init__.py
@@ -41,62 +30,6 @@ from src import ARTIFACTS_DIR, PROC_DIR, MODEL_NAMES    #  MODEL_NAMES = {'knn':
 # 1. helpers
 # ----------------------------------------------------------------------
 def load_models():
-<<<<<<< HEAD
-    """
-    Load trained models from artifacts directory.
-    
-    Returns:
-        dict: Dictionary mapping model names to loaded model objects
-    """
-    models = {}
-    for model_name, _ in MODEL_NAMES.items():
-        model_path = os.path.join(ARTIFACTS_DIR, f"{model_name}.pkl")
-        with open(model_path, 'rb') as f:
-            models[model_name] = pickle.load(f)
-    return models
-
-
-def load_test_data(balanced=False):
-    """
-    Load test data from processed directory.
-    
-    Returns:
-        tuple: X_test features array
-    """
-    prefix = "balanced_" if balanced else ""
-    
-    X_test = pd.read_csv(os.path.join(PROC_DIR, f"{prefix}X_test.csv")).values
-    return X_test
-
-def apply_rule_layer(predictions: Dict[str, np.ndarray]) -> np.ndarray:
-    """
-    Implement Algorithm 1 (rule layer) to combine model predictions.
-    
-    This function takes individual model predictions and applies
-    a voting mechanism to determine the final ensemble prediction.
-    
-    The exact implementation would follow the paper's Algorithm 1:
-    - If all models predict fraud (1), the ensemble predicts fraud
-    - If any model predicts non-fraud (0), the ensemble predicts non-fraud
-    - This favors high recall at the expense of precision
-    
-    Args:
-        predictions: Dictionary mapping model names to their predictions
-        
-    Returns:
-        np.ndarray: Final ensemble predictions
-    """
-    # Initialize an array to store the final predictions
-    ensemble_predictions = np.ones(len(predictions[list(predictions.keys())[0]]), dtype=int)
-    
-    # Iterate through each prediction
-    for i in range(len(ensemble_predictions)):
-        # Count the number of predictions for each class
-        for _, model_predictions in predictions.items():
-            ensemble_predictions[i] = ensemble_predictions[i] and model_predictions[i]
-
-    return ensemble_predictions
-=======
     """Return {'knn': knn_model, 'lda': lda_model, 'linreg': lr_model}"""
     models = {}
     for short_name in MODEL_NAMES:           # 'knn', 'lda', 'linreg'
@@ -108,7 +41,6 @@ def apply_rule_layer(predictions: Dict[str, np.ndarray]) -> np.ndarray:
 def load_test_features(balanced: bool = False) -> np.ndarray:
     prefix = "balanced_" if balanced else ""
     return pd.read_csv(Path(PROC_DIR, f"{prefix}X_test.csv")).values
->>>>>>> origin/soloPlayer
 
 
 def apply_rule_layer(knn_pred: np.ndarray,
