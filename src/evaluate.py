@@ -24,6 +24,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, roc_curve, auc, accuracy_score, recall_score, precision_score, f1_score
+import seaborn as sns
 import logging
 
 from src import ARTIFACTS_DIR, RESULTS_DIR
@@ -45,99 +46,51 @@ def load_data():
 
 def compute_metrics(y_true, y_pred):
     """
-    Compute key performance metrics.
-    
+    Compute key performance metrics, ensuring all outputs are JSON serializable and confusion matrix is not inverted.
     Args:
-        y_true: Ground truth labels
+        y_true: Ground truth labels (isFraud: 1=Fraud, 0=Non-Fraud)
         y_pred: Predicted labels
-        
     Returns:
         dict: Performance metrics
     """
-    cm = confusion_matrix(y_true, y_pred)
-    tn, fp, fn, tp = cm.ravel()
+    cm = confusion_matrix(y_true, y_pred, labels=[0, 1])
     
-    # Compute ROC curve
-    fpr, tpr, _ = roc_curve(y_true, y_pred)
+    fpr, tpr, _ = roc_curve(y_true, y_pred, pos_label=0)
     roc_auc = auc(fpr, tpr)
-    
-    # Compute accuracy
-    accuracy = accuracy_score(y_true, y_pred)
-    
-    precision = tp / (tp + fp)
-    recall = tp / (tp + fn)
-    f1 = 2 * tp / (2 * tp + fp + fn)
-    
+    recall = float(recall_score(y_true, y_pred, pos_label=0))
+    accuracy = float(accuracy_score(y_true, y_pred))
+    f1 = float(f1_score(y_true, y_pred, pos_label=0))
+
     return {
-        "precision": precision,
         "recall": recall,
-        "f1": f1,   
-        "roc_auc": roc_auc,
+        "f1": f1,
+        "roc_auc": float(roc_auc),
         "confusion_matrix": cm.tolist(),
         "accuracy": accuracy,
-        "fpr": fpr,
-        "tpr": tpr
-    }
-
-    precision = precision_score(y_true, y_pred)
-    recall = recall_score(y_true, y_pred)
-    f1 = f1_score(y_true, y_pred)
-    
-    return {
-        "precision": float(precision),
-        "recall": float(recall),
-        "f1": float(f1),
-        "roc_auc": float(roc_auc),
-        "confusion_matrix": cm.tolist(),  # already converted
-        "accuracy": float(accuracy),
         "fpr": fpr.tolist(),
         "tpr": tpr.tolist()
     }
 
 def plot_metrics(metrics):
     """
-    Plot key performance metrics.
-
+    Plot confusion matrix as a heatmap, following notebook convention.
     Args:
         metrics: Performance metrics
     """
-    # Create subplots
-    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
-    
-    # Plot precision, recall, and F1 score
-    ax1.plot(metrics["precision"], metrics["recall"], label="Precision-Recall Curve")
-    ax1.set_xlabel("Precision")
-    ax1.set_ylabel("Recall")
-    ax1.set_title("Precision-Recall Curve")
-    ax1.legend()
-    
-    # Plot ROC curve
-    ax2.plot(metrics["fpr"], metrics["tpr"], label="ROC Curve (AUC = {:.2f})".format(metrics["roc_auc"]))
-    ax2.set_xlabel("False Positive Rate")
-    ax2.set_ylabel("True Positive Rate")
-    ax2.set_title("ROC Curve")
-    ax2.legend()
-    
-    # Plot accuracy
-    ax3.plot(metrics["accuracy"], label="Accuracy")
-    ax3.set_xlabel("Epoch")
-    ax3.set_ylabel("Accuracy")
-    ax3.set_title("Accuracy")
-    ax3.legend()
-    
-    # Plot confusion matrix
-    ax3.imshow(metrics["confusion_matrix"], cmap=plt.cm.Blues)
-    ax3.set_xlabel("Predicted")
-    ax3.set_ylabel("True")
-    ax3.set_title("Confusion Matrix")
-    ax3.colorbar()
-    
+    cm = np.array(metrics["confusion_matrix"])
+    labels = ['Non-Fraud', 'Fraud']
+
+    plt.figure(figsize=(6, 5))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+                xticklabels=labels, yticklabels=labels, linewidths=.5, linecolor='black')
+    plt.xlabel('Predicted Label')
+    plt.ylabel('True Label')
+    plt.title('Ensemble Confusion Matrix')
+
     # Ensure directory exists
     os.makedirs(os.path.join(RESULTS_DIR, "figures"), exist_ok=True)
-
-    # Save plots
     plt.tight_layout()
-    plt.savefig(os.path.join(RESULTS_DIR, "figures", "metrics.png"))
+    plt.savefig(os.path.join(RESULTS_DIR, "figures", "ensemble_confusion_matrix.png"))
     plt.close()
 
 def main():
