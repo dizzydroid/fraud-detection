@@ -83,8 +83,8 @@ def plot_metrics(metrics):
     plt.figure(figsize=(6, 5))
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
                 xticklabels=labels, yticklabels=labels, linewidths=.5, linecolor='black')
-    plt.xlabel('Predicted Label')
-    plt.ylabel('True Label')
+    plt.xlabel('True Label')
+    plt.ylabel('Predicted Label')
     plt.title('Ensemble Confusion Matrix')
 
     # Ensure directory exists
