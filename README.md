@@ -19,16 +19,6 @@ Artifacts will be saved in `artifacts/`, processed data in `data/processed/`, an
 
 You can run `make clean` to wipe all outputs and start fresh.
 
-## 📊 Label Convention
-
-> **Note:**  
-> In this repo, we follow the convention used in Chung & Lee (2023) where:
->
-> - `1` = **Non-Fraud**
-> - `0` = **Fraud**
->
-> This is the opposite of the standard for PaySim (`isFraud`), so please interpret all results accordingly.
-
 ## 🗂️ Project Structure
 
 - **notebooks/**: Main notebook (`fraud-detection.ipynb`) with code, analysis, and visualizations
