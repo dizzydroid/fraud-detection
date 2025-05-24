@@ -16,7 +16,3 @@ __pycache__/
 .venv/
 .vscode/
 .idea/
-
-# Jupyter Notebook
-*.html
-*.pdf
